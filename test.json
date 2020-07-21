@@ -1,0 +1,57 @@
+{
+  "durationDetails": [
+    {
+      "phaseTitle": "Naval Special Warfare Preparatory School",
+      "phaseDuration": "8",
+      "phaseFocus": "Preparation",
+      "phaseDescription": [
+        "Before joining Naval Special Warfare you'll attend Naval Special Warfare Preparatory School (NSW Prep) in Great Lakes, Illinois. At NSW Prep you'll train for two months to improve your fitness and learn the basic concepts of special warfare. NSW Prep ends with a mandatory pass or fail Physical Screening Exit Test. Graduates move on to NSWO in Coronado. Those who don’t pass are reassigned elsewhere in the Navy."
+      ]
+    },
+    {
+      "phaseTitle": "Naval Special Warfare Orientation",
+      "phaseDuration": "3",
+      "phaseFocus": "Orientation",
+      "phaseDescription": [
+        "The NSWO course lasts for three weeks. This is where SEAL officer candidates join their enlisted classmates. You'll be assigned a room in the barracks and be issued gear appropriate for your training. Your instructors will familiarize you with all aspects the special operations training lifestyle, and the values of teamwork and perseverance. The course prepares you for running in the sand with full gear, swimming in the ocean and underwater training in the pool, and how to perform on the obstacle course. You'll also learn NSW culture and heritage."
+      ]
+    },
+    {
+      "phaseTitle": "BUDS - First Phase",
+      "phaseDuration": "7",
+      "phaseFocus": "Conditioning",
+      "phaseDescription": [
+        "First Phase, the basic conditioning phase, is seven weeks long and develops the class in physical training, water competency and mental tenacity while continuing to build teamwork. Each week you're expected to do more running, swimming and calisthenics than the week before, and your performance is measured by a four-mile timed run, a timed obstacle course, and a two-mile timed swim. In addition to physical training, You'll learn how to conduct hydrographic survey operations.",
+        "The fourth week of First Phase is known as Hell Week. In this grueling five-and-a-half day stretch, you'll sleep only about four hours in total, and expected to train for more than 20 hours per day. You'll run more than 200 miles by the end of the week. Every candidate will break down physically, but you'll succeed if have the mental strength to push past your self-perceived limitations and commit yourself to teamwork. Hell Week is the ultimate test of your will. Those who succeed move on to Second Phase."
+      ]
+    },
+    {
+      "phaseTitle": "BUDS - Second Phase",
+      "phaseDuration": "7",
+      "phaseFocus": "Combat Diving",
+      "phaseDescription": [
+        "SEAL candidates become basic combat swimmers and learn open and closed-circuit diving. Second Phase, the combat diving phase, lasts seven weeks. This phase introduces underwater skills that are unique to Navy SEALs. During this phase, You'll learn how to conduct basic combat swimming and conduct open and closed-circuit diving. You must demonstrate a high level of comfort in the water and the ability to perform in stressful and often uncomfortable environments. If you're not completely comfortable in the water, you may struggle to succeed. If you do well, you’ll go on to Third Phase."
+      ]
+    },
+    {
+      "phaseTitle": "BUDS - Third Phase",
+      "phaseDuration": "7",
+      "phaseFocus": "Land Warfare",
+      "phaseDescription": [
+        "Third Phase, the land warfare phase, is seven weeks long and will teach you basic weapons, demolitions, land navigation, patrolling, rappelling, marksmanship and small-unit tactics. For the final three and a half weeks of training, your class will go to “The Rock”, about 60 miles from Coronado, to San Clemente Island. The days become longer and more work intensive, set to mirror the work hours spent in the field.",
+        "You'll be taught to gather and process information that will complete the overall mission. There's more classroom work that teaches map, compass, land navigation and basic weapon skill sets. These skill sets allow you to transition from having novice skills to becoming more comfortable out in the field. Most of this training is new and the learning pace becomes faster and faster.",
+        "Third Phase lays the foundation for the rest of Navy SEAL training. These basic move-shoot-communicate skills will be used by you in SEAL Qualification Training (SQT) and in the SEAL Teams. Those who make it to Third Phase have demonstrated extraordinary commitment to becoming SEALs."
+      ]
+    },
+    {
+      "phaseTitle": "SQT - SEAL Qualification Training",
+      "phaseDuration": "26",
+      "phaseFocus": "Land Warfare",
+      "phaseDescription": [
+        "SEAL Qualification Training (SQT) is a 26-week course that'll take the student from the basic level of Naval Special Warfare to a more advanced degree of tactical training. SQT is designed to provide students with the core tactical knowledge they will need to join a SEAL platoon.",
+        "SQT includes: Weapons training, Small unit tactics, Land navigation, Demolitions, Cold weather training, Medical skills, Maritime operations",
+        "Before graduating, You'll attend Survival, Evasion, Resistance and Escape (SERE) training and parachuting, including static-line and freefall operations at high and low altitudes. Upon completing these requirements, you’ll receive your SEAL Trident warfare designator and be assigned to a SEAL team to begin preparing for your first deployment."
+      ]
+    }
+  ]
+}
