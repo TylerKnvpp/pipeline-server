@@ -20,7 +20,7 @@ const PipelineSchema = new Schema({
   pipelineInisgnia: { type: String, required: false },
   pipelineCoverPhoto: { type: String, required: false },
 
-  workouts: [{ type: Schema.Types.ObjectId, ref: "PipelineWorkout" }],
+  workouts: [{ type: Object }],
 });
 
 module.exports = mongoose.model("Pipeline", PipelineSchema);
