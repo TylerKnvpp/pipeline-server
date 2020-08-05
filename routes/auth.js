@@ -21,8 +21,8 @@ router.route("/sign-up").post((req, res) => {
   }
 
   User.findOne({ email: req.body.email }, (mongoErr, user) => {
-    if (mongoErr) {
-      res.json(mongoErr);
+    if (user) {
+      res.json({ success: false, error: "Email already exists" });
       return;
     }
 
@@ -36,13 +36,36 @@ router.route("/sign-up").post((req, res) => {
       bcrypt.hash(newUser.password, salt, (err, hash) => {
         if (err) throw err;
         newUser.password = hash;
-        newUser
-          .save()
-          .then((user) => {
-            res.json({ success: true, user: user });
-            return;
-          })
-          .catch((err) => console.log(err));
+        newUser.save({}, (signUpErr, user) => {
+          if (signUpErr) {
+            res.json({ success: false, error: signUpErr });
+          }
+
+          if (user) {
+            // User matched
+            // Create JWT Payload
+            const payload = {
+              id: user._id,
+              email: user.email,
+            };
+            // Sign token
+            jwt.sign(
+              payload,
+              keys.sk,
+              {
+                expiresIn: 31556926, // 1 year in seconds
+              },
+              (err, token) => {
+                res.json({
+                  success: true,
+                  token: token,
+                  user: user,
+                  id: user._id,
+                });
+              }
+            );
+          }
+        });
       });
     });
   });
@@ -64,9 +87,11 @@ router.route("/login").post((req, res) => {
   User.findOne({ email }).then((user) => {
     // Check if user exists
     if (!user) {
-      return res
-        .status(404)
-        .json({ userNotFound: "Please enter a valid email." });
+      return res.status(404).json({
+        data: "none",
+        success: false,
+        error: "Please enter a valid email.",
+      });
     }
     // Check password
     bcrypt.compare(password, user.password).then((isMatch) => {
@@ -96,7 +121,7 @@ router.route("/login").post((req, res) => {
       } else {
         return res
           .status(400)
-          .json({ success: false, incorrectPassword: "Incorrect password." });
+          .json({ data: "none", success: false, error: "Incorrect password." });
       }
     });
   });

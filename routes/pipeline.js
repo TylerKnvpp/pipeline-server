@@ -60,7 +60,7 @@ router.route("/:id/get-workouts").get((req, res) => {
   });
 });
 
-router.route("/add-pipeline").post((req, res) => {
+router.route("/new").post((req, res) => {
   let newPipeline = new Pipeline({
     name: req.body.name,
     nickname: req.body.nickname,

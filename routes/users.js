@@ -95,24 +95,41 @@ router.route("/:id/log-workout/:workoutID").post((req, res) => {
   const uid = req.params.id;
   const wid = req.params.workoutID;
 
-  let newUserExerciseLog = new UserWorkout({
-    userScore: req.body.userScore,
-    userID: uid,
-    pipelineWorkoutID: wid,
-  });
-
-  newUserExerciseLog.save({}, (mongoErr, loggedExercise) => {
-    if (mongoErr) {
-      res.json({ success: false, error: mongoErr });
+  User.findById(uid, (findError, user) => {
+    if (findError) {
+      res.json({ success: false, error: findError });
       return;
     }
 
-    res.json({ success: true, log: loggedExercise });
+    let userWorkouts = user.workouts;
+
+    let newUserExerciseLog = new UserWorkout({
+      userScore: req.body.userScore,
+      userID: uid,
+      pipelineWorkoutID: wid,
+    });
+
+    newUserExerciseLog.save({}, (loggingError, loggedExercise) => {
+      if (loggingError) {
+        res.json({ success: false, error: loggingError });
+        return;
+      }
+
+      user.workouts = [...userWorkouts, loggedExercise];
+
+      user.save({}, (updateError, user) => {
+        if (updateError) {
+          res.json({ success: false, error: updateError });
+          return;
+        }
+
+        res.json({ success: true, log: loggedExercise, user: user });
+      });
+    });
   });
 });
 
 const upload = require("../services/ImageUpload");
-const pipelineWorkoutModel = require("../models/pipelineWorkout.model");
 const singleUpload = upload.single("image");
 
 router.post("/:id/add-profile-picture", function (req, res) {

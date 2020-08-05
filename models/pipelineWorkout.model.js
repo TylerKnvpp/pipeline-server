@@ -8,7 +8,7 @@ const PipelineWorkoutSchema = new Schema({
   optimumScore: { type: Number, required: true },
   timeLimit: { type: String, required: true },
   equipment: { type: String, required: false },
-  pipelineID: [{ type: Schema.Types.ObjectId, ref: "Pipeline" }],
+  pipelineID: [{ type: Object }],
 });
 
 module.exports = mongoose.model("PipelineWorkout", PipelineWorkoutSchema);
