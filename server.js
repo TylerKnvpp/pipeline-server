@@ -20,17 +20,17 @@ app.get("/", (req, res, err) => {
   });
 });
 
-// mongoose.connect(uri, {
-//   useNewUrlParser: true,
-//   useCreateIndex: true,
-//   useUnifiedTopology: true,
-// });
+mongoose.connect(uri, {
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useUnifiedTopology: true,
+});
 
-// const connection = mongoose.connection;
+const connection = mongoose.connection;
 
-// connection.once("open", () => {
-//   console.log("Cluster has been connected");
-// });
+connection.once("open", () => {
+  console.log("Cluster has been connected");
+});
 
 // app.use(
 //   "/",
