@@ -49,6 +49,12 @@ app.use("/exercises", exerciseRouter);
 const resourceRouter = require("./routes/resources");
 app.use("/resources", resourceRouter);
 
+app.route("/").get((req, res) => {
+  res.json({
+    hello: "world",
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on: ${PORT}`);
 });
