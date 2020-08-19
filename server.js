@@ -43,17 +43,17 @@ connection.once("open", () => {
 const authRouter = require("./routes/auth");
 app.use("/auth", authRouter);
 
-// const usersRouter = require("./routes/users");
-// app.use("/users", usersRouter);
+const usersRouter = require("./routes/users");
+app.use("/users", usersRouter);
 
-// const pipelineRouter = require("./routes/pipeline");
-// app.use("/pipelines", pipelineRouter);
+const pipelineRouter = require("./routes/pipeline");
+app.use("/pipelines", pipelineRouter);
 
-// const exerciseRouter = require("./routes/exercise");
-// app.use("/exercises", exerciseRouter);
+const exerciseRouter = require("./routes/exercise");
+app.use("/exercises", exerciseRouter);
 
-// const resourceRouter = require("./routes/resources");
-// app.use("/resources", resourceRouter);
+const resourceRouter = require("./routes/resources");
+app.use("/resources", resourceRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on: ${PORT}`);
