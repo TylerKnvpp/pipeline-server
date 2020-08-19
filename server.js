@@ -14,11 +14,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 app.use(bodyParser.json({ limit: "50mb", extended: true }));
 
-app.get("/", (req, res, err) => {
-  res.json({
-    hello: "world",
-  });
-});
+let connected = false;
 
 mongoose.connect(uri, {
   useNewUrlParser: true,
@@ -29,7 +25,15 @@ mongoose.connect(uri, {
 const connection = mongoose.connection;
 
 connection.once("open", () => {
+  connected = true;
   console.log("Cluster has been connected");
+});
+
+app.get("/", (req, res, err) => {
+  res.json({
+    hello: "world",
+    mongo: connected,
+  });
 });
 
 // app.use(
