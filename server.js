@@ -40,8 +40,8 @@ connection.once("open", () => {
 //   })
 // );
 
-// const authRouter = require("./routes/auth");
-// app.use("/auth", authRouter);
+const authRouter = require("./routes/auth");
+app.use("/auth", authRouter);
 
 // const usersRouter = require("./routes/users");
 // app.use("/users", usersRouter);
