@@ -1,7 +1,7 @@
 const router = require("express").Router();
 
-let User = require("../Models/user.model");
-let PST = require("../Models/physicalScreeningTest.model");
+let User = require("../models/user.model");
+let PST = require("../models/physicalScreeningTest.model");
 let PipelineWorkout = require("../models/pipelineWorkout.model");
 let Pipeline = require("../models/pipeline.model");
 

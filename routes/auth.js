@@ -5,7 +5,7 @@ const keys = require("../config/keys");
 const signUpValidation = require("../Validation/SignUpValidation");
 const loginValidation = require("../Validation/LoginValidation");
 
-let User = require("../Models/user.model");
+let User = require("../models/user.model");
 
 router.route("/sign-up").post((req, res) => {
   const request = {
