@@ -14,7 +14,9 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 app.use(bodyParser.json({ limit: "50mb", extended: true }));
 
-app.route("/").get((req, res) => {
+const router = require("express").Router();
+
+router.route("/").get((req, res) => {
   res.json({
     hello: "world",
   });
