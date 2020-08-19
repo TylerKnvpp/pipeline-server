@@ -14,6 +14,12 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 app.use(bodyParser.json({ limit: "50mb", extended: true }));
 
+app.route("/").get((req, res) => {
+  res.json({
+    hello: "world",
+  });
+});
+
 mongoose.connect(uri, {
   useNewUrlParser: true,
   useCreateIndex: true,
@@ -48,12 +54,6 @@ app.use("/exercises", exerciseRouter);
 
 const resourceRouter = require("./routes/resources");
 app.use("/resources", resourceRouter);
-
-app.route("/").get((req, res) => {
-  res.json({
-    hello: "world",
-  });
-});
 
 app.listen(PORT, () => {
   console.log(`Server running on: ${PORT}`);
