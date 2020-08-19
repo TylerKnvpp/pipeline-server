@@ -1,8 +1,9 @@
 const router = require("express").Router();
 
 let User = require("../Models/user.model");
-let UserWorkout = require("../Models/userWorkout.model");
+let PST = require("../Models/physicalScreeningTest.model");
 let PipelineWorkout = require("../models/pipelineWorkout.model");
+let Pipeline = require("../models/pipeline.model");
 
 router.route("/").get((req, res) => {
   User.find({}, (mongoErr, users) => {
@@ -48,16 +49,19 @@ router.route("/:id/workouts").get((req, res) => {
 
 router.route("/:id/add-pipeline").post((req, res) => {
   let uid = req.params.id;
-  let update = {
-    pipelineID: req.body.pipelineID,
-  };
 
-  User.findByIdAndUpdate(uid, update, { new: true }, (mongoErr, user) => {
-    if (mongoErr) {
-      res.json({ success: false, error: mongoErr });
-    }
+  Pipeline.findById(req.body.pipelineID, (pipeErr, pipeline) => {
+    let update = {
+      pipelineID: pipeline,
+    };
 
-    res.json({ success: true, user: user });
+    User.findByIdAndUpdate(uid, update, { new: true }, (mongoErr, user) => {
+      if (mongoErr) {
+        res.json({ success: false, error: mongoErr });
+      }
+
+      res.json({ success: true, user: user });
+    });
   });
 });
 
@@ -65,10 +69,18 @@ router.route("/:id/update-profile").post((req, res) => {
   let uid = req.params.id;
   let update = req.body.update;
 
+  console.log(req.body.update);
+
   User.findByIdAndUpdate(uid, update, { new: true }, (mongoErr, user) => {
     if (mongoErr) {
-      res.json({ success: false, error: mongoErr });
+      res.json({
+        success: false,
+        error: mongoErr,
+        message: "Couldn't update profile.",
+      });
+      return;
     }
+
     res.json({ success: true, user: user });
   });
 });
@@ -86,46 +98,177 @@ router.route("/:id/add-skills").post((req, res) => {
         return;
       }
 
-      res.json(user);
+      console.log(user);
+
+      res.json({ success: true, user: user });
     }
   );
 });
 
-router.route("/:id/log-workout/:workoutID").post((req, res) => {
+router.route("/:id/log-pst").post((req, res) => {
   const uid = req.params.id;
-  const wid = req.params.workoutID;
+  const evos = req.body.evolutions;
+  const unitInignia = req.body.unitInsignia;
+  const unitName = req.body.nickname;
 
-  User.findById(uid, (findError, user) => {
-    if (findError) {
-      res.json({ success: false, error: findError });
-      return;
-    }
+  let pids = [];
+  let failedEvos = [];
+  let passedEvos = [];
+  let pass = true;
 
-    let userWorkouts = user.workouts;
-
-    let newUserExerciseLog = new UserWorkout({
-      userScore: req.body.userScore,
-      userID: uid,
-      pipelineWorkoutID: wid,
+  if (req.body.evolutions.length) {
+    req.body.evolutions.forEach((evo) => {
+      pids.push(evo.pipelineWorkoutID);
     });
+  }
 
-    newUserExerciseLog.save({}, (loggingError, loggedExercise) => {
-      if (loggingError) {
-        res.json({ success: false, error: loggingError });
+  PipelineWorkout.find()
+    .where("_id")
+    .in(pids)
+    .exec((monErr, records) => {
+      if (monErr) {
+        res.json({
+          success: false,
+          message: "Couldn't find logs.",
+          error: monErr,
+        });
         return;
       }
 
-      user.workouts = [...userWorkouts, loggedExercise];
+      evos.forEach((evo) => {
+        let comparetor = records.find((record) => {
+          return record._id == evo.pipelineWorkoutID;
+        });
 
-      user.save({}, (updateError, user) => {
-        if (updateError) {
-          res.json({ success: false, error: updateError });
+        if (comparetor.type === "timed") {
+          if (evo.userScore > comparetor.minumumScore) {
+            pass = false;
+            failedEvos.push({
+              workout: comparetor,
+              userEvolution: evo.userScore,
+            });
+          } else {
+            passedEvos.push({
+              workout: comparetor,
+              userEvolution: evo.userScore,
+            });
+          }
+        }
+
+        if (comparetor.type === "reps") {
+          if (evo.userScore < comparetor.minumumScore) {
+            pass = false;
+            failedEvos.push({
+              workout: comparetor,
+              userEvolution: evo.userScore,
+            });
+          } else {
+            passedEvos.push({
+              workout: comparetor,
+              userEvolution: evo.userScore,
+            });
+          }
+        }
+      });
+
+      let newUserPST = new PST({
+        userID: uid,
+        evolutions: req.body.evolutions,
+        pass: pass,
+        unitInsignia: unitInignia,
+        nickname: unitName,
+        failedUserEvolutions: failedEvos,
+        passedUserEvolutions: passedEvos,
+      });
+
+      newUserPST.save({}, (saveErr, savedPST) => {
+        if (saveErr) {
+          res.json({
+            success: false,
+            message: "Couldn't save PST.",
+            error: saveErr,
+          });
           return;
         }
 
-        res.json({ success: true, log: loggedExercise, user: user });
+        User.updateOne(
+          { _id: uid },
+          { $push: { psts: savedPST } },
+          (updateErr, success) => {
+            if (updateErr) {
+              res.json({ success: false, message: "Could not save to user." });
+              return;
+            }
+
+            res.json({
+              success: true,
+              pst: savedPST,
+            });
+          }
+        );
       });
     });
+});
+
+router.route("/:id/get-psts/").get((req, res) => {
+  const uid = req.params.id;
+  const pid = req.params.pid;
+
+  PST.find({ userID: uid }, (findErr, psts) => {
+    if (findErr) {
+      res.json({
+        succes: false,
+        message: "Couldn't find psts.",
+        error: findErr,
+      });
+      return;
+    }
+
+    res.json({
+      success: true,
+      psts: psts,
+    });
+  });
+});
+
+router.route("/:id/get-pst/:pid").get((req, res) => {
+  const uid = req.params.id;
+  const pid = req.params.pid;
+
+  PST.findById(pid, (findErr, pst) => {
+    if (findErr) {
+      res.json({
+        success: false,
+        message: "Couldn't find PST.",
+        error: findErr,
+      });
+    }
+
+    let pipelineWorkoutIDs = [];
+
+    pst.evolutions.forEach((evo) =>
+      pipelineWorkoutIDs.push(evo.pipelineWorkoutID)
+    );
+
+    PipelineWorkout.find()
+      .where("_id")
+      .in(pipelineWorkoutIDs)
+      .exec((monErr, records) => {
+        if (monErr) {
+          res.json({
+            success: false,
+            message: "Couldn't find logs.",
+            error: monErr,
+          });
+          return;
+        }
+
+        res.json({
+          success: true,
+          pst: pst,
+          records: records,
+        });
+      });
   });
 });
 

@@ -4,6 +4,10 @@ const multerS3 = require("multer-s3");
 
 const s3 = new aws.S3();
 
+multer({
+  limits: { fieldSize: 2 * 1024 * 1024 },
+});
+
 aws.config.update({
   secretAccessKey: process.env.S3_SECRET,
   accessKeyId: process.env.S3_ACCESS_KEY,

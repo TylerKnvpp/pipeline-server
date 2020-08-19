@@ -115,6 +115,7 @@ router.route("/login").post((req, res) => {
               token: token,
               email: user.email,
               id: user.id,
+              user: user,
             });
           }
         );

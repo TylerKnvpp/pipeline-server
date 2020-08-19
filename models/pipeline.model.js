@@ -18,6 +18,8 @@ const PipelineSchema = new Schema({
 
   skillsRequired: [{ type: String, required: false }],
   pipelineInisgnia: { type: String, required: false },
+  branchInisgnia: { type: String, required: false },
+  unitInisgnia: { type: String, required: false },
   pipelineCoverPhoto: { type: String, required: false },
 
   workouts: [{ type: Object }],

@@ -33,6 +33,8 @@ router.route("/new").post((req, res) => {
     optimumScore: req.body.optimumScore,
     timeLimit: req.body.timeLimit,
     equipment: req.body.equipment,
+    order: req.body.order,
+    icon: req.body.icon,
   });
 
   newExercise.save({}, (mongoErr, exercise) => {

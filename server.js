@@ -41,10 +41,13 @@ const usersRouter = require("./routes/users");
 app.use("/users", usersRouter);
 
 const pipelineRouter = require("./routes/pipeline");
-app.use("/pipeline", pipelineRouter);
+app.use("/pipelines", pipelineRouter);
 
 const exerciseRouter = require("./routes/exercise");
-app.use("/exercise", exerciseRouter);
+app.use("/exercises", exerciseRouter);
+
+const resourceRouter = require("./routes/resources");
+app.use("/resources", resourceRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on: ${PORT}`);
