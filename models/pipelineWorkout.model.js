@@ -9,7 +9,7 @@ const PipelineWorkoutSchema = new Schema({
   timeLimit: { type: String, required: true },
   equipment: { type: String, required: false },
   icon: { type: String, required: false },
-  type: { type: String, required: false },
+  type: { type: String, required: true },
   pipelineID: [{ type: Object }],
   order: { type: Number, required: true },
 });

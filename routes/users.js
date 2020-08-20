@@ -302,4 +302,26 @@ router.post("/:id/add-profile-picture", function (req, res) {
   });
 });
 
+router.get("/:id/get-latest-pst", (req, res) => {
+  const uid = req.params.id;
+
+  PST.find({ userID: uid }, (findErr, psts) => {
+    if (findErr) {
+      res.json({
+        succes: false,
+        message: "Couldn't find psts.",
+        error: findErr,
+      });
+      return;
+    }
+
+    const lastIndex = psts.length - 1;
+
+    res.json({
+      success: true,
+      latestPST: psts[lastIndex],
+    });
+  });
+});
+
 module.exports = router;
