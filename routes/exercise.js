@@ -35,6 +35,7 @@ router.route("/new").post((req, res) => {
     equipment: req.body.equipment,
     order: req.body.order,
     icon: req.body.icon,
+    type: req.body.type,
   });
 
   newExercise.save({}, (mongoErr, exercise) => {
