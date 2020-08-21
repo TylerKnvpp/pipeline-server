@@ -61,13 +61,13 @@ router.route("/:id/get-workouts").get((req, res) => {
 });
 
 router.route("/new").post((req, res) => {
+  console.log(req.body);
   let newPipeline = new Pipeline({
     name: req.body.name,
     nickname: req.body.nickname,
     militaryBranch: req.body.militaryBranch,
     description: req.body.description,
     duration: req.body.duration,
-    skillsRequired: req.body.skills,
   });
 
   newPipeline.save({}, (mongoErr, pipeline) => {
