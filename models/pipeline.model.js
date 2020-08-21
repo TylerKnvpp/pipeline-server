@@ -6,6 +6,7 @@ let DurationDetails = new mongoose.Schema({
   phaseDuration: { type: String, required: false },
   phaseDescription: [{ type: String, required: false }],
   phaseFocus: { type: String, required: false },
+  phaseLocation: { type: String, required: false },
 });
 
 const PipelineSchema = new Schema({

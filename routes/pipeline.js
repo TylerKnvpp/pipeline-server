@@ -67,6 +67,7 @@ router.route("/new").post((req, res) => {
     militaryBranch: req.body.militaryBranch,
     description: req.body.description,
     duration: req.body.duration,
+    skillsRequired: req.body.skills,
   });
 
   newPipeline.save({}, (mongoErr, pipeline) => {
