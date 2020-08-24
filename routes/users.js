@@ -324,4 +324,183 @@ router.get("/:id/get-latest-pst", (req, res) => {
   });
 });
 
+router.get("/:id/get-friends", (req, res) => {
+  User.findById(req.params.id, (findErr, user) => {
+    if (findErr) {
+      res.status.apply(400).json({
+        success: false,
+        error: findErr,
+      });
+    }
+
+    User.find()
+      .where("_id")
+      .in(user.friends)
+      .exec((monErr, records) => {
+        if (monErr) {
+          res.json({
+            success: false,
+            message: "Couldn't find logs.",
+            error: monErr,
+          });
+          return;
+        }
+
+        res.status(200).json({
+          success: true,
+          friends: records,
+        });
+      });
+  });
+});
+
+router.get("/:id/get-requests", (req, res) => {
+  User.findById(req.params.id, (findErr, user) => {
+    if (findErr) {
+      res.status.apply(400).json({
+        success: false,
+        error: findErr,
+      });
+    }
+
+    User.find()
+      .where("_id")
+      .in(user.friendRequests)
+      .exec((monErr, records) => {
+        if (monErr) {
+          res.json({
+            success: false,
+            message: "Couldn't find logs.",
+            error: monErr,
+          });
+          return;
+        }
+
+        res.status(200).json({
+          success: true,
+          users: records,
+        });
+      });
+  });
+});
+
+router.post("/:requester/friend-request/:requested", (req, res) => {
+  const requester = req.params.requester;
+  const requested = req.params.requested;
+
+  User.updateOne(
+    { _id: requester },
+    { $push: { sentFriendRequestsPending: requested } },
+    (updateErr, success) => {
+      if (updateErr) {
+        res.json({ success: false, message: "Could not save to user." });
+        return;
+      }
+
+      if (success) {
+        User.updateOne(
+          { _id: requested },
+          { $push: { friendRequests: requester } },
+          (updateErr, success) => {
+            if (updateErr) {
+              res.json({ success: false, message: "Could not save to user." });
+              return;
+            }
+
+            if (success) {
+              res.status(200).json({
+                success: true,
+                message: "Request sent!",
+              });
+            }
+          }
+        );
+      }
+    }
+  );
+});
+
+router.post("/:accepter_id/accept-request/:accepted_id", (req, res) => {
+  const requested = req.params.accepter_id;
+  const requester = req.params.accepted_id;
+
+  User.updateOne(
+    { _id: requester },
+    { $push: { friends: requested } },
+    (updateErr, success) => {
+      if (updateErr) {
+        res.json({ success: false, message: "Could not save to user." });
+        return;
+      }
+
+      User.updateOne(
+        { _id: requester },
+        { $pull: { sentFriendRequestsPending: requested } },
+        (pullErr, pullSuccess) => {
+          if (updateErr) {
+            res.json({ success: false, message: "Could not save to user." });
+            return;
+          }
+        }
+      );
+
+      if (success) {
+        User.updateOne(
+          { _id: requested },
+          { $push: { friends: requester } },
+
+          (updateErr, success) => {
+            if (updateErr) {
+              res.json({ success: false, message: "Could not save to user." });
+              return;
+            }
+
+            User.updateOne(
+              { _id: requested },
+
+              { $pull: { friendRequests: requester } },
+              (updateErr, success) => {
+                if (updateErr) {
+                  res.json({
+                    success: false,
+                    message: "Could not save to user.",
+                  });
+                  return;
+                }
+              }
+            );
+
+            if (success) {
+              res.status(200).json({
+                success: true,
+                message: "Request sent!",
+              });
+            }
+          }
+        );
+      }
+    }
+  );
+});
+
+router.post("/:uid/decline-request/:requester_id", (req, res) => {
+  const userDeclining = req.params.uid;
+  const userDeclined = req.params.requester_id;
+
+  User.update(
+    { _id: userDeclining },
+    { $pull: { friendRequests: userDeclined } },
+    (updateErr, success) => {
+      if (updateErr) {
+        res.status(400).json({ success: false, error: success });
+      }
+
+      res.json({
+        success: true,
+        message: "Friend request denied.",
+      });
+    }
+  );
+});
+
 module.exports = router;

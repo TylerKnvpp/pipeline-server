@@ -12,6 +12,14 @@ const UserSchema = new Schema({
   skills: [{ type: String, required: false }],
   pipelineID: { type: Object },
   psts: [{ type: Object }],
+  friendRequests: [
+    { type: Schema.Types.ObjectId, ref: "User", required: true },
+  ],
+  sentFriendRequestsPending: [
+    { type: Schema.Types.ObjectId, ref: "User", required: true },
+  ],
+  friends: [{ type: Schema.Types.ObjectId, ref: "User", required: true }],
+  blocked: [{ type: Schema.Types.ObjectId, ref: "User", required: true }],
 });
 
 module.exports = mongoose.model("User", UserSchema);
