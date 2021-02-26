@@ -421,6 +421,7 @@ router.post("/:requester/friend-request/:requested", (req, res) => {
 });
 
 router.post("/:accepter_id/accept-request/:accepted_id", (req, res) => {
+  console.log("asdf");
   const requested = req.params.accepter_id;
   const requester = req.params.accepted_id;
 
@@ -499,6 +500,25 @@ router.post("/:uid/decline-request/:requester_id", (req, res) => {
         success: true,
         message: "Friend request denied.",
       });
+    }
+  );
+});
+
+router.post("/search", (req, res) => {
+  const searchTerm = req.body.searchInput;
+
+  User.find(
+    { username: { $regex: searchTerm, $options: "i" } },
+    (err, docs) => {
+      if (err) {
+        return res.json({
+          success: false,
+          message: "Couldn't complete Search.",
+          error: err,
+        });
+      }
+
+      res.json({ success: true, users: docs });
     }
   );
 });

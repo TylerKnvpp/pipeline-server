@@ -9,7 +9,25 @@ const uri = process.env.MONGODB_URI;
 const cors = require("cors");
 const bodyParser = require("body-parser");
 
-app.use(cors());
+// let whitelist = [
+//   "http://localhost:4000",
+//   "https://cad-usa.vercel.app",
+//   "https://cad.tgknapp11.vercel.app",
+// ];
+
+// app.use(
+//   cors({
+//     origin: function (origin, callback) {
+//       // allow requests with no origin
+//       if (!origin) return callback(null, true);
+//       if (whitelist.indexOf(origin) === -1) {
+//         var message = "Piss out my ass";
+//         return callback(new Error(message), false);
+//       }
+//       return callback(null, true);
+//     },
+//   })
+// );
 
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 app.use(bodyParser.json({ limit: "50mb", extended: true }));

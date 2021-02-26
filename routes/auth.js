@@ -76,6 +76,7 @@ router.route("/login").post((req, res) => {
     email: req.body.email,
     password: req.body.password,
   };
+
   const { error, isValid } = loginValidation(request);
   // Check validation
   if (!isValid) {
